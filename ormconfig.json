@@ -1,0 +1,25 @@
+{
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "postgres",
+    "password": "daniel456",
+    "database": "merco",
+    "synchronize": false,
+    "logging": false,
+    "entities": [
+      "./src/api/**/*.model.ts"
+    ],
+    "subscribers": [
+      "./src/subscribers/**/*.ts"
+    ],
+    "migrations": [
+      "./src/migrations/**/*.ts"
+    ],
+    "cli": {
+      "entitiesDir": "./src/**/*",
+      "migrationsDir": "./src/migrations",
+      "subscribersDir": "./src/subscribers"
+    }
+  }
+  
