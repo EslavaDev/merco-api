@@ -7,6 +7,7 @@ import { UsersModule } from './api/users/users.module';
 import { ProductsModule } from './api/products/products.module';
 import { AuthModule } from './api/auth/auth.module';
 import { MarketsModule } from './api/markets/markets.module';
+import { HttpStrategy } from './api/auth/local.strategy';
 
 const ormConfigProd = require('../ormconfig.build.json');
 
@@ -31,6 +32,7 @@ console.log(NODE_ENV);
     AuthModule,
     ProductsModule
   ],
+  providers:[HttpStrategy]
 })
 export class AppModule {
   constructor(private connection: Connection) {

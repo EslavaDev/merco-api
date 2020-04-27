@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './local.strategy';
+import { HttpStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { PassportModule } from '@nestjs/passport';
@@ -27,7 +27,7 @@ import { MarketsService } from '../markets/markets.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [MarketsService, UsersService, AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService],
+  providers: [MarketsService, UsersService, AuthService, HttpStrategy, JwtStrategy],
+  exports: [AuthService, HttpStrategy],
 })
 export class AuthModule {}

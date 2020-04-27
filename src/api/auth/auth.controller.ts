@@ -2,6 +2,8 @@ import { Controller, Get, Request, Post, UseGuards, UseFilters, Body, ForbiddenE
 import { AuthService } from './auth.service';
 import { User } from '../users/users.model';
 import { CrudRequestInterceptor } from '@nestjsx/crud';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from './roles.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -9,7 +11,6 @@ export class AuthController {
   
   @Post('verify')
   async login( @Body() body) {
-    console.log(body)
     const user = await this.authService.validateUser(body.token);
     if (!user) {
       throw new ForbiddenException();
@@ -19,7 +20,16 @@ export class AuthController {
 
   @UseInterceptors(CrudRequestInterceptor)
   @Post('register')
-  getProfile(@Body() data: User) {
+  register(@Body() data: User) {
     return this.authService.register(data)
+  }
+
+
+  @UseGuards(AuthGuard('bearer'), RolesGuard)
+  @SetMetadata('role', ['admin', 'market', 'customer'])
+  @Get('profile')
+  getProfile(@Request() req) {
+    console.log('validacion')
+    return req.sub
   }
 }
