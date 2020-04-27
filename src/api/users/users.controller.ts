@@ -39,11 +39,13 @@ export class UsersController {
   }
 
   @UseInterceptors(CrudRequestInterceptor)
+  @UseGuards(AuthGuard('bearer'), RolesGuard)
+  @SetMetadata('role', ['admin'])
   @Post()
   createOneCopy(@Body() data: User) {
     return this.service.create(data);
   }
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('bearer'))
   @UseInterceptors(CrudRequestInterceptor)
   @Get()
   getAll(@Request() req) {
@@ -51,7 +53,7 @@ export class UsersController {
     return this.service.find();
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('bearer'), RolesGuard)
   @SetMetadata('role', ['admin', 'market', 'customer'])
   @UseInterceptors(CrudRequestInterceptor)
   @Put('')
@@ -63,7 +65,7 @@ export class UsersController {
     return this.service.update(req.user.id, body);
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('bearer'), RolesGuard)
   @SetMetadata('role', ['admin'])
   @UseInterceptors(CrudRequestInterceptor)
   @Put(':id')
@@ -71,7 +73,7 @@ export class UsersController {
     return this.service.update(params.id, body);
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(AuthGuard('bearer'), RolesGuard)
   @SetMetadata('role', ['admin'])
   @UseInterceptors(CrudRequestInterceptor)
   @Post('assigne-market')
