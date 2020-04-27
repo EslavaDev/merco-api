@@ -1,27 +1,25 @@
-import { Controller, Get, Request, Post, UseGuards, UseFilters, Body, ForbiddenException, SetMetadata } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Controller, Get, Request, Post, UseGuards, UseFilters, Body, ForbiddenException, SetMetadata, UseInterceptors } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { HttpExceptionFilter } from '../../commons/http-exception';
-import { RolesGuard } from './roles.guard';
+import { User } from '../users/users.model';
+import { CrudRequestInterceptor } from '@nestjsx/crud';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   
-  @Post('login')
+  @Post('verify')
   async login( @Body() body) {
     console.log(body)
     const user = await this.authService.validateUser(body.token);
     if (!user) {
       throw new ForbiddenException();
     }
-    return this.authService.login(user);
+    return user
   }
 
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @SetMetadata('role', ['admin', 'market', 'customer'])
-  @Get('profile')
-  getProfile(@Request() req) {
-    return this.authService.profile(req.sub)
+  @UseInterceptors(CrudRequestInterceptor)
+  @Post('register')
+  getProfile(@Body() data: User) {
+    return this.authService.register(data)
   }
 }

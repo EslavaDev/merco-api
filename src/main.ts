@@ -8,7 +8,7 @@ import * as admin from 'firebase-admin';
 
 const serviceAccount = require("../merco-api.json");
 
-export const prefix = 'microservice-prefix';
+export const prefix = 'food';
 
 async function bootstrap() {
   admin.initializeApp({
