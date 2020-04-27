@@ -8,13 +8,24 @@ import { ProductsModule } from './api/products/products.module';
 import { AuthModule } from './api/auth/auth.module';
 import { MarketsModule } from './api/markets/markets.module';
 
+const ormConfigProd = require('../ormconfig.build.json');
+
+let defaultOrm = ormConfigProd
+const NODE_ENV = process.env.NODE_ENV;
+
+if(NODE_ENV === 'dev'){
+  const ormConfigDev = require('../ormconfig.json');
+  defaultOrm = ormConfigDev;
+}
+
+console.log(NODE_ENV);
 @Module({
   imports: [
     
     TerminusModule.forRootAsync({
       useClass: HealthCheckService
     }),
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({...defaultOrm}),
     UsersModule,
     MarketsModule,
     AuthModule,
